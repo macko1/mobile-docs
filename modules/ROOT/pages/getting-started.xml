@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<book lang="en">
+<bookinfo>
+<title>Heading</title>
+<date>2018-12-12</date>
+</bookinfo>
+<chapter id="_heading">
+<title>Heading</title>
+<section id="_heading_2">
+<title>Heading</title>
+<simpara>This is a plain-text demonstrating usage of attributes.</simpara>
+<important>
+<simpara>This is an admonition.</simpara>
+</important>
+<itemizedlist>
+<listitem>
+<simpara>Simple</simpara>
+</listitem>
+<listitem>
+<simpara>Bullet</simpara>
+</listitem>
+<listitem>
+<simpara>List</simpara>
+</listitem>
+</itemizedlist>
+</section>
+</chapter>
+</book>

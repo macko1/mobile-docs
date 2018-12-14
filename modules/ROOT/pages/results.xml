@@ -1,0 +1,73 @@
+<report xmlns="http://emender.blackened.cz/1.0/">
+  <suite name="TechnicalAccuracy" result="fail">
+    <info>
+      <description>The Techical Accuracy test verifies that documentation is technically accurate. For example, it reports non-functional or blacklisted external links.</description>
+      <authors>Jaromir Hradilek, Pavel Vomacka, Pavel Tisnovsky, Lana Ovcharenko</authors>
+      <emails>jhradilek@redhat.com, pvomacka@redhat.com, ptisnovs@redhat.com, lovchare@redhat.com</emails>
+      <modified>2018-04-27</modified>
+      <tags>
+        <tag>DocBook</tag>
+        <tag>Release</tag>
+      </tags>
+    </info>
+    <case name="testExternalLinks" result="fail">
+      <test result="pass">ANALYZING REGULAR LINKS...</test>
+      <test result="fail">ftp://mirror.vutbr.cz/ uses FTP protocol, but you can replace it with HTTP and it will work.</test>
+      <test result="fail">https://www.openshift.org/ gets redirected.</test>
+      <test result="pass">https://github.com/minishift/minishift/issues/1287 is OK.</test>
+      <test result="pass">https://github.com/openshift/origin/issues/18747 is OK.</test>
+      <test result="fail">https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#prerequisites is broken (404 status code).</test>
+      <test result="fail">https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#macos-with-docker-for-mac is broken (404 status code).</test>
+      <test result="fail">https://www.openshift.org/download.html gets redirected.</test>
+      <test result="fail">https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#getting-started is broken (404 status code).</test>
+      <test result="fail">https://hub.docker.com/ has no page title.</test>
+      <test result="fail">https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html gets redirected.</test>
+      <test result="pass">https://github.com/aerogear/mobile-core is OK.</test>
+      <test result="fail">mobile-clients.xml has 000 status code.</test>
+      <test result="pass">https://cocoacasts.com/what-are-app-ids-and-bundle-identifiers/ is OK.</test>
+      <test result="fail">con_services.xml has 000 status code.</test>
+      <test result="fail">https://www.keycloak.org/documentation.html gets redirected.</test>
+      <test result="fail">https://www.keycloak.org/docs/3.3/server_admin/topics/users/create-user.html gets redirected.</test>
+      <test result="fail">https://www.keycloak.org/docs/3.3/server_admin/topics/users/credentials.html gets redirected.</test>
+      <test result="fail">https://developer.android.com/studio/index.html gets redirected.</test>
+      <test result="fail">http://openjdk.java.net/install/index.html gets redirected.</test>
+      <test result="pass">https://developer.android.com/studio/install is OK.</test>
+      <test result="fail">https://cocoapods.org gets redirected.</test>
+      <test result="fail">https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html gets redirected.</test>
+      <test result="fail">https://nodejs.org/ gets redirected.</test>
+      <test result="info">https://cordova.apache.org/docs/en/latest/guide/cli/#installing-the-cordova-cli is an achor.</test>
+      <test result="info">https://cordova.apache.org/#getstarted is an achor.</test>
+      <test result="fail">https://www.visualstudio.com/xamarin/ gets redirected.</test>
+      <test result="fail">http://openjdk.java.net/install/index.html gets redirected.</test>
+      <test result="fail">https://developer.apple.com/download/more/ is forbidden (403 status code).</test>
+      <test result="fail">https://developer.xamarin.com/getting-started/ gets redirected.</test>
+      <test result="pass">https://cocoapods.org/ is OK.</test>
+      <test result="fail">https://support.google.com/android/answer/2819522?hl=en gets redirected.</test>
+      <test result="fail">https://support.google.com/nexus/answer/2840804?hl=en gets redirected.</test>
+      <test result="pass">https://developer.android.com/studio/command-line/adb is OK.</test>
+      <test result="pass">https://support.google.com/nexus/answer/2844832?hl=en is OK.</test>
+      <test result="fail">https://support.apple.com/en-us/ht204060 has no page title.</test>
+      <test result="fail">https://support.apple.com/en-us/ht201371 has no page title.</test>
+      <test result="fail">https://support.apple.com/en-us/HT204477 has no page title.</test>
+      <test result="pass">https://developer.android.com/training/basics/firstapp/running-app is OK.</test>
+      <test result="fail">https://help.apple.com/xcode/mac/current/#/dev2809b6cff has no page title.</test>
+      <test result="info">https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#android is an achor.</test>
+      <test result="info">https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#ios is an achor.</test>
+      <test result="fail">https://blogs.msdn.microsoft.com/visualstudio/2018/05/08/hyper-v-android-emulator-support/ has 500 status code.</test>
+      <test result="fail">https://developer.xamarin.com/getting-started-ios/ gets redirected.</test>
+      <test result="pass">OVERALL RESULTS FOR REGULAR LINKS:</test>
+      <test result="fail">Valid FTP: 1</test>
+      <test result="fail">Invalid FTP: 0</test>
+      <test result="fail">Broken: 3</test>
+      <test result="fail">Forbidden: 1</test>
+      <test result="fail">Other status code: 3</test>
+      <test result="fail">No page title: 5</test>
+      <test result="fail">Redirected: 17</test>
+      <test result="info">Internal: 0</test>
+      <test result="info">From example list: 0</test>
+      <test result="info">Anchors: 4</test>
+      <test result="info">Commands: 0</test>
+      <test result="pass">OK: 9</test>
+    </case>
+  </suite>
+</report>

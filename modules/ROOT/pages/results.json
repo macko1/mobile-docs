@@ -1,0 +1,239 @@
+{
+    "metadata" : {
+        "name":"unknown"
+    },
+    "results" : {
+        "TechnicalAccuracy": {
+            "testExternalLinks": [
+                {
+                    "status":  "pass",
+                    "message": "ANALYZING REGULAR LINKS..."
+                },
+                {
+                    "status":  "fail",
+                    "message": "ftp://mirror.vutbr.cz/ uses FTP protocol, but you can replace it with HTTP and it will work."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://www.openshift.org/ gets redirected."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://github.com/minishift/minishift/issues/1287 is OK."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://github.com/openshift/origin/issues/18747 is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#prerequisites is broken (404 status code)."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#macos-with-docker-for-mac is broken (404 status code)."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://www.openshift.org/download.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#getting-started is broken (404 status code)."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://hub.docker.com/ has no page title."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html gets redirected."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://github.com/aerogear/mobile-core is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "mobile-clients.xml has 000 status code."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://cocoacasts.com/what-are-app-ids-and-bundle-identifiers/ is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "con_services.xml has 000 status code."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://www.keycloak.org/documentation.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://www.keycloak.org/docs/3.3/server_admin/topics/users/create-user.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://www.keycloak.org/docs/3.3/server_admin/topics/users/credentials.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://developer.android.com/studio/index.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "http://openjdk.java.net/install/index.html gets redirected."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://developer.android.com/studio/install is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://cocoapods.org gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://nodejs.org/ gets redirected."
+                },
+                {
+                    "status":  "info",
+                    "message": "https://cordova.apache.org/docs/en/latest/guide/cli/#installing-the-cordova-cli is an achor."
+                },
+                {
+                    "status":  "info",
+                    "message": "https://cordova.apache.org/#getstarted is an achor."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://www.visualstudio.com/xamarin/ gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "http://openjdk.java.net/install/index.html gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://developer.apple.com/download/more/ is forbidden (403 status code)."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://developer.xamarin.com/getting-started/ gets redirected."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://cocoapods.org/ is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://support.google.com/android/answer/2819522?hl=en gets redirected."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://support.google.com/nexus/answer/2840804?hl=en gets redirected."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://developer.android.com/studio/command-line/adb is OK."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://support.google.com/nexus/answer/2844832?hl=en is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://support.apple.com/en-us/ht204060 has no page title."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://support.apple.com/en-us/ht201371 has no page title."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://support.apple.com/en-us/HT204477 has no page title."
+                },
+                {
+                    "status":  "pass",
+                    "message": "https://developer.android.com/training/basics/firstapp/running-app is OK."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://help.apple.com/xcode/mac/current/#/dev2809b6cff has no page title."
+                },
+                {
+                    "status":  "info",
+                    "message": "https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#android is an achor."
+                },
+                {
+                    "status":  "info",
+                    "message": "https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#ios is an achor."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://blogs.msdn.microsoft.com/visualstudio/2018/05/08/hyper-v-android-emulator-support/ has 500 status code."
+                },
+                {
+                    "status":  "fail",
+                    "message": "https://developer.xamarin.com/getting-started-ios/ gets redirected."
+                },
+                {
+                    "status":  "pass",
+                    "message": "OVERALL RESULTS FOR REGULAR LINKS:"
+                },
+                {
+                    "status":  "fail",
+                    "message": "Valid FTP: 1"
+                },
+                {
+                    "status":  "fail",
+                    "message": "Invalid FTP: 0"
+                },
+                {
+                    "status":  "fail",
+                    "message": "Broken: 3"
+                },
+                {
+                    "status":  "fail",
+                    "message": "Forbidden: 1"
+                },
+                {
+                    "status":  "fail",
+                    "message": "Other status code: 3"
+                },
+                {
+                    "status":  "fail",
+                    "message": "No page title: 5"
+                },
+                {
+                    "status":  "fail",
+                    "message": "Redirected: 17"
+                },
+                {
+                    "status":  "info",
+                    "message": "Internal: 0"
+                },
+                {
+                    "status":  "info",
+                    "message": "From example list: 0"
+                },
+                {
+                    "status":  "info",
+                    "message": "Anchors: 4"
+                },
+                {
+                    "status":  "info",
+                    "message": "Commands: 0"
+                },
+                {
+                    "status":  "pass",
+                    "message": "OK: 9"
+                }
+            ]
+        }
+    }
+}

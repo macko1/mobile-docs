@@ -1,0 +1,43 @@
+<testsuites>
+  <testsuite name="TechnicalAccuracy">
+    <testcase name="testExternalLinks" classname="testExternalLinks">
+        <error message="ftp://mirror.vutbr.cz/ uses FTP protocol, but you can replace it with HTTP and it will work.">ftp://mirror.vutbr.cz/ uses FTP protocol, but you can replace it with HTTP and it will work.</error>
+        <error message="https://www.openshift.org/ gets redirected.">https://www.openshift.org/ gets redirected.</error>
+        <error message="https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#prerequisites is broken (404 status code).">https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#prerequisites is broken (404 status code).</error>
+        <error message="https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#macos-with-docker-for-mac is broken (404 status code).">https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#macos-with-docker-for-mac is broken (404 status code).</error>
+        <error message="https://www.openshift.org/download.html gets redirected.">https://www.openshift.org/download.html gets redirected.</error>
+        <error message="https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#getting-started is broken (404 status code).">https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#getting-started is broken (404 status code).</error>
+        <error message="https://hub.docker.com/ has no page title.">https://hub.docker.com/ has no page title.</error>
+        <error message="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html gets redirected.">https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html gets redirected.</error>
+        <error message="mobile-clients.xml has 000 status code.">mobile-clients.xml has 000 status code.</error>
+        <error message="con_services.xml has 000 status code.">con_services.xml has 000 status code.</error>
+        <error message="https://www.keycloak.org/documentation.html gets redirected.">https://www.keycloak.org/documentation.html gets redirected.</error>
+        <error message="https://www.keycloak.org/docs/3.3/server_admin/topics/users/create-user.html gets redirected.">https://www.keycloak.org/docs/3.3/server_admin/topics/users/create-user.html gets redirected.</error>
+        <error message="https://www.keycloak.org/docs/3.3/server_admin/topics/users/credentials.html gets redirected.">https://www.keycloak.org/docs/3.3/server_admin/topics/users/credentials.html gets redirected.</error>
+        <error message="https://developer.android.com/studio/index.html gets redirected.">https://developer.android.com/studio/index.html gets redirected.</error>
+        <error message="http://openjdk.java.net/install/index.html gets redirected.">http://openjdk.java.net/install/index.html gets redirected.</error>
+        <error message="https://cocoapods.org gets redirected.">https://cocoapods.org gets redirected.</error>
+        <error message="https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html gets redirected.">https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html gets redirected.</error>
+        <error message="https://nodejs.org/ gets redirected.">https://nodejs.org/ gets redirected.</error>
+        <error message="https://www.visualstudio.com/xamarin/ gets redirected.">https://www.visualstudio.com/xamarin/ gets redirected.</error>
+        <error message="http://openjdk.java.net/install/index.html gets redirected.">http://openjdk.java.net/install/index.html gets redirected.</error>
+        <error message="https://developer.apple.com/download/more/ is forbidden (403 status code).">https://developer.apple.com/download/more/ is forbidden (403 status code).</error>
+        <error message="https://developer.xamarin.com/getting-started/ gets redirected.">https://developer.xamarin.com/getting-started/ gets redirected.</error>
+        <error message="https://support.google.com/android/answer/2819522?hl=en gets redirected.">https://support.google.com/android/answer/2819522?hl=en gets redirected.</error>
+        <error message="https://support.google.com/nexus/answer/2840804?hl=en gets redirected.">https://support.google.com/nexus/answer/2840804?hl=en gets redirected.</error>
+        <error message="https://support.apple.com/en-us/ht204060 has no page title.">https://support.apple.com/en-us/ht204060 has no page title.</error>
+        <error message="https://support.apple.com/en-us/ht201371 has no page title.">https://support.apple.com/en-us/ht201371 has no page title.</error>
+        <error message="https://support.apple.com/en-us/HT204477 has no page title.">https://support.apple.com/en-us/HT204477 has no page title.</error>
+        <error message="https://help.apple.com/xcode/mac/current/#/dev2809b6cff has no page title.">https://help.apple.com/xcode/mac/current/#/dev2809b6cff has no page title.</error>
+        <error message="https://blogs.msdn.microsoft.com/visualstudio/2018/05/08/hyper-v-android-emulator-support/ has 500 status code.">https://blogs.msdn.microsoft.com/visualstudio/2018/05/08/hyper-v-android-emulator-support/ has 500 status code.</error>
+        <error message="https://developer.xamarin.com/getting-started-ios/ gets redirected.">https://developer.xamarin.com/getting-started-ios/ gets redirected.</error>
+        <error message="Valid FTP: 1">Valid FTP: 1</error>
+        <error message="Invalid FTP: 0">Invalid FTP: 0</error>
+        <error message="Broken: 3">Broken: 3</error>
+        <error message="Forbidden: 1">Forbidden: 1</error>
+        <error message="Other status code: 3">Other status code: 3</error>
+        <error message="No page title: 5">No page title: 5</error>
+        <error message="Redirected: 17">Redirected: 17</error>
+    </testcase>
+  </testsuite>
+</testsuites>

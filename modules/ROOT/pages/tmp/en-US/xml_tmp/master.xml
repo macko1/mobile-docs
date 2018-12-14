@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<book lang="en">
+<bookinfo>
+<title>Getting Started with AeroGear Mobile Services</title>
+<date>2018-12-10</date>
+</bookinfo>
+<chapter id="_introduction">
+<title>Introduction</title>
+<simpara><literal><ulink url="ftp://mirror.vutbr.cz/">ftp://mirror.vutbr.cz/</ulink></literal></simpara>
+<simpara>AeroGear Mobile Services provides solutions to common development challenges faced by mobile developers.
+With OpenShift&#8217;s Container technology providing a secure, scalable backend platform, mobile developers can use the AeroGear SDK which supports a range of native (iOS &amp; Android) and hybrid (Xamarin &amp; Cordova) platforms to create secure, high quality apps and makes it easy to add features such as Push Notifications or Authentication.</simpara>
+<important>
+<simpara>AeroGear Mobile Services is currently in a development phase. This makes it unsuitable for production deployment. Use this community release as an evaluation environment for developing and deploying mobile applications on Openshift.</simpara>
+</important>
+<simpara>This guide shows you how to:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Set up AeroGear Mobile Services on OpenShift</simpara>
+</listitem>
+<listitem>
+<simpara>Create a Mobile Client and a Mobile Service (Identity Management)</simpara>
+</listitem>
+<listitem>
+<simpara>Set up a local development environment</simpara>
+</listitem>
+<listitem>
+<simpara>Configure the AeroGear showcase app for your mobile platform (Android, iOS, Cordova or Xamarin).</simpara>
+</listitem>
+<listitem>
+<simpara>Run the showcase app and make calls to the Identity Management service.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Make sure you satisfy all the requirements listed in the <xref linkend="prerequisites"/> and that you have a mobile app development environment configured. Some experience with OpenShift administration would also be helpful.</simpara>
+</chapter>
+<chapter id="_setting_up_aerogear_mobile_services_on_openshift">
+<title>Setting up AeroGear Mobile Services on OpenShift</title>
+<simpara>To use Mobile Services, you must run OpenShift and install an add-on which enables Mobile Services. For more information about OpenShift, see <ulink url="https://www.openshift.org/">OpenShift website</ulink>.</simpara>
+<note>
+<simpara>AeroGear recommends running OpenShift using the method described in this document. However, there are many ways to run OpenShift, and Mobile Services is compatible with most of these methods. There is a known issue with Minishift that makes it unsuitable for mobile development. This issue is described in <ulink url="https://github.com/minishift/minishift/issues/1287">Issue 1287</ulink>.</simpara>
+</note>
+<section id="prerequisites">
+<title>Prerequisites</title>
+<itemizedlist>
+<listitem>
+<simpara>MacOS or Linux</simpara>
+<note>
+<simpara>Due to an <ulink url="https://github.com/openshift/origin/issues/18747">OpenShift bug</ulink>, Mobile Services will not run on RHEL/CentOS 7.4 or RHEL/CentOS 7.5.</simpara>
+</note>
+</listitem>
+<listitem>
+<simpara>A system running OpenShift <literal>oc cluster up</literal> as described in <ulink url="https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#prerequisites">Local Cluster Management</ulink></simpara>
+<note>
+<simpara>Installation on macOS with Docker Machine has not been tested, use the <ulink url="https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#macos-with-docker-for-mac">Docker for Mac</ulink> instructions when installing OpenShift.</simpara>
+</note>
+<itemizedlist>
+<listitem>
+<simpara>Use <ulink url="https://www.openshift.org/download.html">OpenShift client tools</ulink> version 3.9</simpara>
+<important>
+<simpara>OpenShift oc executable must be located in a system location that is known to all shells (e.g. /usr/local/bin)</simpara>
+</important>
+<important>
+<simpara>Ensure that you can run <ulink url="https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#getting-started">oc cluster up</ulink> with no errors before moving on to the installation of AeroGear.</simpara>
+</important>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>Access to a <ulink url="https://hub.docker.com/">Docker Hub</ulink> account. The installer uses Docker Hub as a source for AeroGear Docker images.</simpara>
+</listitem>
+<listitem>
+<simpara><ulink url="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html">Ansible</ulink> (version 2.6 or above)</simpara>
+</listitem>
+<listitem>
+<simpara>For Linux (Fedora), add an extra port to the <literal>dockerc</literal> zone:</simpara>
+</listitem>
+</itemizedlist>
+<programlisting language="sh" linenumbering="unnumbered">$ firewall-cmd --permanent --zone dockerc --add-port 443/tcp
+$ firewall-cmd --reload</programlisting>
+<itemizedlist>
+<listitem>
+<simpara>A local mobile development environment for the platform you want to develop on.</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section id="procedure">
+<title>Procedure</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Clone the Mobile-core installer:</simpara>
+<simpara>The installer configures the local development installation of AeroGear Mobile Services using ansible scripts in our <ulink url="https://github.com/aerogear/mobile-core">mobile-core</ulink> repo.</simpara>
+<simpara>Clone this repo to your local machine and check out the 1.0.0 tag using:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">git clone https://github.com/aerogear/mobile-core.git
+cd mobile-core
+git checkout 1.0.0</programlisting>
+</listitem>
+<listitem>
+<simpara>In the same directory, run the installer:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ./installer/install.sh</programlisting>
+<simpara>The installer checks that valid versions of Ansible, Docker and the OpenShift Client Tools
+are installed.</simpara>
+</listitem>
+<listitem>
+<simpara>Enter your Docker Hub login credentials when prompted. The installer checks these credentials are valid before continuing.</simpara>
+</listitem>
+<listitem>
+<simpara>Accept the default values for the next set of prompts, unless you have specific requirements and understand the implications of changing the values.
+For more information about these values, see the <emphasis>DockerHub, Cluster IP and Wildcard DNS Host values</emphasis> section in <link linkend="additional-resources">Additional Resources</link>.</simpara>
+<note>
+<simpara>If your Cluster IP address is reported as 127.0.0.1, the installation will not succeed. Check your network connection and restart the installer.</simpara>
+</note>
+<programlisting language="bash" linenumbering="unnumbered">DockerHub Tag (Defaults to latest):
+DockerHub Organisation (Defaults to aerogearcatalog):
+// Cluster IP (Defaults to Network IP Address)
+Wildcard DNS Host (Defaults to nip.io):</programlisting>
+<simpara>For more information, see the <emphasis>DockerHub, Cluster IP and Wildcard DNS Host values</emphasis> section in <link linkend="additional-resources">Additional resources</link>.</simpara>
+<simpara>The following installation can take a while the first time it runs, as it pulls a number of Docker images. Once completed successfully, this results in an output similar to the following:</simpara>
+<screen>TASK [output-oc-cluster-status : debug] ******************************************************************************************************************************************************
+ok: [localhost] =&gt; {
+    "msg": [
+        "Web console URL: https://192.168.37.1:8443/console/",
+        "",
+        "Config is at host directory /var/lib/origin/openshift.local.config",
+        "Volumes are at host directory /var/lib/origin/openshift.local.volumes",
+        "Persistent volumes are at host directory /var/lib/origin/openshift.local.pv",
+        "Data is at host directory /path/to/mobile-core/ui/openshift-data"
+    ]
+}
+
+PLAY RECAP ***********************************************************************************************************************************************************************************
+localhost                  : ok=44   changed=17   unreachable=0    failed=0</screen>
+<simpara>The log above is displayed after a successful installation.</simpara>
+</listitem>
+<listitem>
+<simpara>Verify the installation:</simpara>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara>Browse to the Web console URL displayed at the end of the installation, and log in, accepting the self-signed certificate if displayed.</simpara>
+<simpara>The developer login credentials are:</simpara>
+<screen>username: developer
+password: password</screen>
+<simpara>The service catalog is displayed</simpara>
+</listitem>
+<listitem>
+<simpara>Check that the <emphasis>Mobile</emphasis> tab is displayed in the service catalog. If this tab is not displayed, wait a few minutes to make sure that the installation process has completed. If the <emphasis>Mobile</emphasis> tab still is not displayed, follow the troubleshooting steps below.</simpara>
+</listitem>
+</orderedlist>
+</listitem>
+</orderedlist>
+<simpara><inlinemediaobject>
+<imageobject>
+<imagedata fileref="catalog-mobile-clients.png"/>
+</imageobject>
+<textobject><phrase>catalog mobile clients</phrase></textobject>
+</inlinemediaobject></simpara>
+<bridgehead id="additional-resources" renderas="sect1">Additional resources</bridgehead>
+</section>
+<section id="_troubleshooting">
+<title>Troubleshooting</title>
+<simpara>If you have problems running AeroGear Mobile Services, run the installer using the <literal>--debug</literal> option to capture as much information as possible:</simpara>
+<screen>$ ./installer/install.sh --debug</screen>
+<simpara>Firewall issues can occur with external devices trying to communicate with Mobile Services provisioned on a Linux machine.</simpara>
+<simpara>This is due to a number of Mobile Services using ports which are restricted to root users only. If you encounter these issues, you can add the ports to your firewall. Depending on the port your service uses an example of the ports you may want to add to your firewall are:</simpara>
+<note>
+<simpara>The following command will only add the specified port for the current session. If you reload your firewall or restart your machine the specified port will be restricted again.</simpara>
+</note>
+<screen>$ firewall-cmd --add-port 443/tcp
+$ firewall-cmd --add-port 80/tcp</screen>
+</section>
+<section id="_dockerhub_cluster_ip_and_wildcard_dns_host_values">
+<title>DockerHub, Cluster IP and Wildcard DNS Host values</title>
+<simpara>Use <emphasis role="strong">DockerHub Tag</emphasis> and <emphasis role="strong">DockerHub Organisation</emphasis> to configure the location of the APBs used by the service-catalog in the cluster you are creating:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">DockerHub Tag (Defaults to latest):
+DockerHub Organisation (Defaults to aerogearcatalog):</programlisting>
+<simpara>The <emphasis role="strong">Cluster IP</emphasis> value defaults to the IP address of your primary network interface.
+If you want to connect to your OpenShift instance from a mobile device, ensure that your device is on the same network.
+Typically, you should ensure you are using the IP Address of your Wireless Adapter (if one exists):</simpara>
+<programlisting language="bash" linenumbering="unnumbered">Cluster IP (Defaults to < Network IP Address >)</programlisting>
+<simpara>The <emphasis role="strong">Wildcard DNS Host</emphasis> option alters the wildcard DNS host you want to use:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">Wildcard DNS Host (Defaults to nip.io):</programlisting>
+</section>
+</chapter>
+<chapter id="registering">
+<title>Registering a Mobile Client</title>
+<simpara>After the setup is completed, the next thing you need to do is to register a Mobile Client for the mobile app that you are going to develop.</simpara>
+<simpara>A Mobile Client in OpenShift is a representation of the mobile app that you are developing locally. Mobile Clients allow you to bind your mobile app to mobile services such as Identity Management, Push Notification, Mobile Metrics and others. This makes many of the common tasks associated with mobile development much easier and quicker to implement. For more information, please see <ulink url="mobile-clients.xml">Mobile Clients in OpenShift</ulink></simpara>
+<bridgehead id="_procedure" renderas="sect2">Procedure</bridgehead>
+<simpara>To create a Mobile Client in your OpenShift project:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Log into the OpenShift console.</simpara>
+</listitem>
+<listitem>
+<simpara>Choose your project.</simpara>
+</listitem>
+<listitem>
+<simpara>Click <emphasis role="strong">Add to Project</emphasis> and choose <emphasis role="strong">Browse Catalog</emphasis> from the options.</simpara>
+<simpara>You can filter the catalog items to only show mobile specific items by clicking the <emphasis role="strong">Mobile</emphasis> tab.</simpara>
+<simpara><inlinemediaobject>
+<imageobject>
+<imagedata fileref="catalog-all.png"/>
+</imageobject>
+<textobject><phrase>Available Mobile Clients</phrase></textobject>
+</inlinemediaobject></simpara>
+</listitem>
+<listitem>
+<simpara>Click the <emphasis role="strong">Apps</emphasis> tab and then choose the mobile platform (Android, iOS, Cordova or Xamarin) and follow the wizard.</simpara>
+<note>
+<simpara>On the wizard&#8217;s <emphasis role="strong">configuration</emphasis> screen, it is recommended that you input the name of the showcase application into the <emphasis role="strong">Package Name</emphasis> text box.</simpara>
+</note>
+<note>
+<simpara>When registering an iOS app, you are prompted for a bundle id. See the <ulink url="https://cocoacasts.com/what-are-app-ids-and-bundle-identifiers/">description of bundle identifiers</ulink> for more information.</simpara>
+</note>
+</listitem>
+</orderedlist>
+<simpara>After the Mobile Client is provisioned, you can navigate to it from Project Overview. The Mobile Client view displays a list of mobile services that you can associate with the Mobile Client, and offers to provision any mobile service that is in the service catalog but is not currently provisioned.</simpara>
+</chapter>
+<chapter id="provisioning">
+<title>Provisioning your First Service</title>
+<simpara>Mobile Services provide commonly required features for mobile app development.</simpara>
+<simpara>This section introduces the procedures for using Mobile Services by guiding you through the process using the Identity Management service. For a full list of available services, see <ulink url="con_services.xml">Mobile Services</ulink></simpara>
+<simpara>To provision the Identity Management mobile service:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Log into the OpenShift console.</simpara>
+</listitem>
+<listitem>
+<simpara>Create a new project or choose an existing project.</simpara>
+</listitem>
+<listitem>
+<simpara>Select <emphasis role="strong">Catalog</emphasis> from the left hand menu.</simpara>
+<simpara>You can filter the catalog items to only show mobile specific items by selecting the <emphasis role="strong">Mobile</emphasis> tab.</simpara>
+</listitem>
+<listitem>
+<simpara>Click <emphasis role="strong">Services</emphasis> and choose the Identity Management service.</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="catalog-mobile-services.png"/>
+</imageobject>
+<textobject><phrase>catalog mobile services</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</listitem>
+<listitem>
+<simpara>Follow the wizard for provisioning that service.</simpara>
+<note>
+<simpara>If prompted to <emphasis role="strong">Create a Binding</emphasis>, choose <emphasis role="strong">Do not bind at this time</emphasis>.</simpara>
+</note>
+</listitem>
+</orderedlist>
+<note>
+<simpara>When completing the Identity Management provisioning wizard, you are prompted to enter configuration data. For the purposes of this guide, keep the default values.
+For more information about the Identity Management provisioning wizard fields, see <link linkend="Identity Management-configuration-additional-resources">Identity Management Configuration</link>.</simpara>
+</note>
+<simpara>Once the wizard steps are completed, navigate to the Project Overview in OpenShift to see the newly provisioned service.
+Provisioning a service may take some time.</simpara>
+<bridgehead id="Identity Management-configuration-additional-resources" renderas="sect2">Additional resources</bridgehead>
+<section id="_identity_management_configuration">
+<title>Identity Management Configuration</title>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Keycloak admin username</emphasis>: Username for Keycloak administration</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Keycloak admin password</emphasis>: Password for the Keycloak admin user</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Name of the Keycloak realm</emphasis>: Name of the keycloak realm. (defaults to current namespace)</simpara>
+</listitem>
+</itemizedlist>
+<note>
+<simpara>A realm manages a set of users, credentials, roles, and groups. A user belongs to and logs into a realm. Realms are isolated from one another and can only manage and authenticate the users that they control.</simpara>
+</note>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Connect to an existing shared service</emphasis>: Select if you want to use an existing service and you have the URL and credentials to use that service.</simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">URL of the shared service</emphasis>: Enter a value if you want to use an existing shared service.</simpara>
+</listitem>
+</itemizedlist>
+</section>
+</chapter>
+<chapter id="binding">
+<title>Binding a Mobile Client</title>
+<simpara>To use mobile services, you must represent your mobile app in OpenShift using a Mobile Client, and that Mobile Client must be associated with the mobile service.
+This association is called <emphasis role="strong">binding</emphasis> and it is necessary for your mobile app to use that service.</simpara>
+<simpara>To bind a Mobile Client with a mobile service:</simpara>
+<section id="_procedure_2">
+<title>Procedure</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Navigate to the <emphasis role="strong">Overview</emphasis> of your OpenShift project.</simpara>
+</listitem>
+<listitem>
+<simpara>Select the Mobile Client name listed in the Mobile Clients section.</simpara>
+</listitem>
+<listitem>
+<simpara>Navigate to <emphasis role="strong">Mobile Services</emphasis> tab.</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mobile-clients-services-all-unbound.png"/>
+</imageobject>
+<textobject><phrase>mobile clients services all unbound</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</listitem>
+<listitem>
+<simpara>Click <emphasis role="strong">Create Binding</emphasis> and follow the <emphasis role="strong">Create Binding</emphasis> wizard to associate the Mobile Client with the Identity Management Service.</simpara>
+</listitem>
+<listitem>
+<simpara>Fill out the binding parameters required by the Identity Management Service.</simpara>
+<note>
+<simpara>Use <literal>public</literal> when binding a Mobile Client to a Identity Management. When binding mobile services to each other, use <literal>bearer</literal>.</simpara>
+</note>
+</listitem>
+</orderedlist>
+<simpara>The Identity Management service will now be expandable, details about the service can be viewed.</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mobile-clients-services-all-idm-provisioned.png"/>
+</imageobject>
+<textobject><phrase>mobile clients services all idm provisioned</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section id="localdev">
+<title>Configuring the Service</title>
+<simpara>The following section will guide you through configuring the schema of the redirect url and web origin for a client in Keycloak.
+This is required to enable OpenID authentication.
+For an explanation of these terms, see <ulink url="https://www.keycloak.org/documentation.html">Keycloak Documentation</ulink>.</simpara>
+<section id="choose-schema">
+<title>Choose the schema of a redirect url</title>
+<sidebar role="primary">
+<title>Android</title>
+<simpara>It is recommended to use the package name of the Android app as the schema of the redirect url to avoid conflicts. (e.g. <literal>com.aerogear.androidshowcase</literal>)</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<simpara>It is recommended to use the Bundle Identifier of the iOS app as the schema of the redirect url. (e.g. <literal>org.aerogear.ios-showcase-template</literal>)</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>Cordova</title>
+<simpara>Redirect url is <literal>http://localhost/*</literal>, without <literal>:/callback</literal>. Web Origin is <literal>http://localhost/*</literal>.</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>Xamarin</title>
+<simpara>Depending on the platform, set the redirect as described in either the Android or the iOS tab.</simpara>
+</sidebar>
+</section>
+<section id="_configuring_keycloak">
+<title>Configuring Keycloak</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Log into the OpenShift console and navigate to the Project Overview.</simpara>
+</listitem>
+<listitem>
+<simpara>Navigate to the Mobile Client screen.</simpara>
+</listitem>
+<listitem>
+<simpara>Select the Mobile Services tab.</simpara>
+</listitem>
+<listitem>
+<simpara>If a binding to the Identity Management service is in progress, a spinning icon is displayed to the right of the Identity Management entry. Wait for the binding process to complete.</simpara>
+</listitem>
+<listitem>
+<simpara>If the <emphasis>Keycloak Realm URL</emphasis> URL is not visible, expand the Identity Management Service by clicking the &gt; icon.</simpara>
+</listitem>
+<listitem>
+<simpara>Click on the <emphasis role="strong">Keycloak Realm URL</emphasis> link to open the Keycloak Administration Console.</simpara>
+</listitem>
+<listitem>
+<simpara>Log in to the Administration console using the credentials you specified when <link linkend="provisioning-the-identity-management-service">Provisioning</link> the service (defaults to admin:admin).</simpara>
+</listitem>
+<listitem>
+<simpara>Select <literal>Clients</literal> from the left navigation menu.</simpara>
+</listitem>
+<listitem>
+<simpara>Select your client from the list of clients. The name of your client is derived from the name of the Mobile Client, the name of the mobile development platform and the client type, for example <literal>myapp-android-public</literal>.</simpara>
+</listitem>
+<listitem>
+<simpara>Add <literal>&lt;schema&gt;:/callback</literal> as an additional entry to <literal>Valid Redirect URIs</literal>. See <xref linkend="choose-schema"/> to determine the value for <literal>&lt;schema&gt;</literal>.</simpara>
+</listitem>
+<listitem>
+<simpara>Add <literal>&lt;schema&gt;</literal> as an additional entry to <literal>Web Origins</literal>.  See <xref linkend="choose-schema"/> to determine the value for <literal>&lt;schema&gt;</literal>.</simpara>
+</listitem>
+<listitem>
+<simpara>Save your changes.</simpara>
+</listitem>
+<listitem>
+<simpara>Create a new user account as described in <ulink url="https://www.keycloak.org/docs/3.3/server_admin/topics/users/create-user.html">Creating a New User</ulink>.</simpara>
+</listitem>
+<listitem>
+<simpara>Set up credentials for the new user as described in <ulink url="https://www.keycloak.org/docs/3.3/server_admin/topics/users/credentials.html">User Credentials</ulink>.</simpara>
+</listitem>
+</orderedlist>
+</section>
+</section>
+</chapter>
+<chapter id="_setting_up_your_local_development_environment">
+<title>Setting Up your Local Development Environment</title>
+<section id="_supported_environments">
+<title>Supported Environments</title>
+<simpara>In order to perform local development, you will need to have set up a local development environment or IDE.
+Mobile Services supports mobile app development across iOS Native, Android Native, Cordova and Xamarin.</simpara>
+<note>
+<simpara>You can only use the AeroGear Xamarin SDK to create iOS and Android Apps.</simpara>
+</note>
+<sidebar role="primary">
+<title>Android</title>
+<simpara>You need the following installed on your machine:</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; Android SDK or Android Studio from <ulink url="https://developer.android.com/studio/index.html">Google</ulink></simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; (Recommended) The latest version of <ulink url="http://openjdk.java.net/install/index.html">OpenJDK</ulink></simpara>
+</listitem>
+</itemizedlist>
+<simpara>For information on how to set up a local Android development environment, see the <ulink url="https://developer.android.com/studio/install">Android Studio documentation</ulink>.</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<simpara>You need the following installed on your machine:</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; iOS 9 or later</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; Xcode 9 or later</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; <ulink url="https://cocoapods.org">CocoaPods</ulink></simpara>
+</listitem>
+</itemizedlist>
+<simpara>The AeroGear SDK for iOS is available using the CocoaPods package manager.
+If you have not installed CocoaPods, install it by running the command:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ gem install cocoapods</programlisting>
+<simpara>For information on how to set up a local iOS development environment, see the <ulink url="https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html">Swift documentation</ulink>.</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>Cordova</title>
+<simpara>You need the following installed on your machine:</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; <ulink url="https://nodejs.org/">Node.js</ulink> version 8.9.4 runtime and NPM</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003;  <ulink url="https://cordova.apache.org/docs/en/latest/guide/cli/#installing-the-cordova-cli">Cordova CLI</ulink> version 8.0.0</simpara>
+</listitem>
+</itemizedlist>
+<simpara>For information on how to set up a local Cordova development environment, see the <ulink url="https://cordova.apache.org/#getstarted">Cordova documentation</ulink>.</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>Xamarin</title>
+<simpara>You need the following installed on your system:</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; Visual Studio Tools for Xamarin from <ulink url="https://www.visualstudio.com/xamarin/">Microsoft</ulink></simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; (Optional) The latest version of <ulink url="http://openjdk.java.net/install/index.html">OpenJDK</ulink>, if you would like to install the showcase app on an Android device or emulator</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; (Optional) The latest version of XCode and command line tools for XCode available from <ulink url="https://developer.apple.com/download/more/">Apple</ulink>, if you would like to install the showcase app on an iOS device or emulator</simpara>
+</listitem>
+</itemizedlist>
+<simpara>For information on how to set up a local Xamarin development environment, see the <ulink url="https://developer.xamarin.com/getting-started/">Xamarin documentation</ulink>.</simpara>
+</sidebar>
+</section>
+</chapter>
+<chapter id="running">
+<title>Running your First Mobile App</title>
+<section id="_cloning_the_showcase_app">
+<title>Cloning the Showcase App</title>
+<sidebar role="primary">
+<title>Android</title>
+<programlisting language="bash" linenumbering="unnumbered">$ git clone https://github.com/aerogear/android-showcase-template.git
+$ cd android-showcase-template
+$ git checkout 1.0.0</programlisting>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<programlisting language="bash" linenumbering="unnumbered">$ git clone https://github.com/aerogear/ios-showcase-template.git
+$ cd ios-showcase-template
+$ git checkout 1.0.0</programlisting>
+</sidebar>
+<sidebar role="secondary">
+<title>Cordova</title>
+<programlisting language="bash" linenumbering="unnumbered">$ git clone https://github.com/aerogear/cordova-showcase-template.git
+$ cd cordova-showcase-template
+$ git checkout 1.0.0</programlisting>
+</sidebar>
+<sidebar role="secondary">
+<title>Xamarin</title>
+<programlisting language="bash" linenumbering="unnumbered">$ git clone https://github.com/aerogear/xamarin-showcase-template.git
+$ cd xamarin-showcase-template
+$ git checkout 1.0.0</programlisting>
+</sidebar>
+</section>
+<section id="_downloading_the_mobile_services_configuration_file">
+<title>Downloading the Mobile Services Configuration File</title>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Navigate to your project in OpenShift.</simpara>
+</listitem>
+<listitem>
+<simpara>On the <emphasis role="strong">Overview</emphasis> screen, expand your Mobile Client to view the <emphasis role="strong">CLIENT INFO</emphasis>.</simpara>
+</listitem>
+<listitem>
+<simpara>Copy the configuration to your clipboard.</simpara>
+</listitem>
+<listitem>
+<simpara>Save the contents of the clipboard to a new file called <literal>mobile-services.json</literal>.</simpara>
+<note>
+<simpara>The mobile-services.json file is the link between your provisioned services on OpenShift and the mobile app you are developing. This file provides all required configuration to initialise the various SDKs and get them hooked up/connected to the back-end services.</simpara>
+</note>
+</listitem>
+<listitem>
+<simpara>Follow the platform-specific instructions:</simpara>
+</listitem>
+</orderedlist>
+<sidebar role="primary">
+<title>Android</title>
+<simpara>Move mobile-services.json to the following location in your application project:</simpara>
+<simpara><literal>app/src/main/assets/mobile-services.json</literal></simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<simpara>Move mobile-services.json to the following location in your application project:</simpara>
+<simpara><literal>&lt;app directory&gt;/mobile-services.json</literal></simpara>
+<note>
+<simpara>Ensure that <literal>mobile-services.json</literal> is a member of the project in the Xcode Project Navigator.</simpara>
+</note>
+</sidebar>
+<sidebar role="secondary">
+<title>Cordova</title>
+<simpara>Move mobile-services.json to the following location in your application project:</simpara>
+<simpara><literal>src/mobile-services.json</literal></simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>Xamarin</title>
+<simpara>Move mobile-services.json to the following location in your application project:</simpara>
+<simpara><literal>Resources/mobile-services.json</literal></simpara>
+</sidebar>
+</section>
+<section id="_building_the_app">
+<title>Building the app</title>
+<sidebar role="primary">
+<title>Android</title>
+<programlisting language="bash" linenumbering="unnumbered">$ ./gradlew assembleDebug</programlisting>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<simpara>Run this command to install dependencies:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Install CocoaPods as described in <ulink url="https://cocoapods.org/">https://cocoapods.org/</ulink> if it is not already installed.</simpara>
+</listitem>
+<listitem>
+<simpara>Run this command to install dependencies:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ pod install</programlisting>
+</listitem>
+</orderedlist>
+</sidebar>
+<sidebar role="secondary">
+<title>Cordova</title>
+<programlisting language="bash" linenumbering="unnumbered">$ npm install
+$ npm run ionic:build</programlisting>
+</sidebar>
+<sidebar role="secondary">
+<title>Xamarin</title>
+<simpara>Run this command to install dependencies (optional):</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ nuget restore</programlisting>
+</sidebar>
+</section>
+<section id="_using_self_signed_certificates_in_mobile_apps">
+<title>Using Self-Signed Certificates in Mobile Apps</title>
+<note>
+<simpara>Before you can run a mobile app and connect to Mobile Services, you must configure self-signed certificates on the mobile device.</simpara>
+</note>
+<simpara>Throughout the development lifecycle of a mobile app, a common
+requirement is to integrate and connect with back-end
+services in a secure manner. This is achieved using SSL/TLS.</simpara>
+<simpara>However, in order for the client device to connect over SSL/TLS, it needs to trust the
+certificates used by the back-end services, which are signed by a certificate authority.
+Most client devices have a list of well-known and trusted certificate authorities pre-installed and this allows the client devices to verify the certificates used by the back-end services.</simpara>
+<simpara>However, this normally doesn&#8217;t work in a development environment, such as a local OpenShift cluster as it uses self-signed certificates which are not signed by any of the trusted certificate authorties. This means by default the client devices won&#8217;t be able to establish secure connections with the back-end services that are running on a local OpenShift cluster.</simpara>
+<simpara>To work around the problem, you must manually extract the root certificate from the cluster, install it on the device and mark it as trusted.</simpara>
+<section id="extracting-root-ca">
+<title>1. Extracting the OpenShift Root Certificate Authority Cert</title>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara>Log into OpenShift as the admin user:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ oc login -u system:admin</programlisting>
+</listitem>
+<listitem>
+<simpara>Run the following command:</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ oc get secret router-certs --template='{{index .data "tls.crt"}}' -n default  |  \
+base64 --decode | sed -e '1,/^-----END RSA PRIVATE KEY-----$/ d'  &gt; /tmp/localcluster.crt</programlisting>
+<simpara>The resulting file is located in the <literal>/tmp</literal> directory.</simpara>
+</listitem>
+</orderedlist>
+</section>
+<section id="installing-on-device">
+<title>2. Installing the OpenShift Root Certificate Authority Cert on a Device</title>
+<sidebar role="primary">
+<title>Android</title>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara><ulink url="https://support.google.com/android/answer/2819522?hl=en">Set screen lock</ulink> on the mobile device to ensure the certificate can be installed.</simpara>
+</listitem>
+<listitem>
+<simpara>Copy the file to your device using one of the following methods:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Email attachment (Recommended) - Simply email the certificate to an address
+accessible from the device and download the attachment.</simpara>
+</listitem>
+<listitem>
+<simpara>Cloud service - Use a cloud storage service such as Dropbox or Google
+Drive which is accessible from the device, browse to the certificate and
+proceed to download it.</simpara>
+</listitem>
+<listitem>
+<simpara>USB - Attach the device to the machine hosting
+OpenShift via USB and drag the certificate to a devices file system. Here is an <ulink url="https://support.google.com/nexus/answer/2840804?hl=en">example guide for Google Nexus devices</ulink>. It may be different for other devices.</simpara>
+</listitem>
+<listitem>
+<simpara><ulink url="https://developer.android.com/studio/command-line/adb">Android Debug Bridge</ulink> (adb) - Use the adb push command to push the certificate to device or emulator:</simpara>
+<screen>$ adb push /tmp/localcluster.crt /sdcard/Download/localcluster.crt</screen>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>Add the certificate to your device:</simpara>
+<simpara>If you are using the email or cloud service approach, once the certificate file is downloaded, you will be prompted by the Android system automatically to install the file. You can simply follow the instructions to complete the process.</simpara>
+<simpara>However, if you are using the USB approach, you will need to install the certificate manually: go to Settings &gt; Security &gt; Install from storage, tap on the copied certificate file and Android system should detect the
+certificate and let you add it to the device. Here is <ulink url="https://support.google.com/nexus/answer/2844832?hl=en">a sample guide for Google Nexus devices</ulink>.</simpara>
+</listitem>
+</orderedlist>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara>Enable <ulink url="https://support.apple.com/en-us/ht204060">Passcode</ulink> or <ulink url="https://support.apple.com/en-us/ht201371">TouchID</ulink> protection on the mobile device to ensure the certificate can be installed.</simpara>
+</listitem>
+<listitem>
+<simpara>Copy the file to your device using one of the following methods:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Email attachment (Recommended) - Simply email the certificate to an address
+accessible from the device and download the attachment.</simpara>
+</listitem>
+<listitem>
+<simpara>Cloud service - Use a cloud storage service such as Dropbox or Google
+Drive which is accessible from the device, browse to the certificate and
+proceed to download it.</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>Add the certificate to your device:</simpara>
+<simpara>When you download the certificate, the
+device should automatically detect a profile. Simply follow the on
+screen instructions to install it.</simpara>
+<note>
+<simpara>Versions iOS 10.3 and later require an additional step to trust the now
+installed certificate. Instructions can be found on the
+<ulink url="https://support.apple.com/en-us/HT204477">Apple support site</ulink></simpara>
+</note>
+</listitem>
+</orderedlist>
+</sidebar>
+</section>
+</section>
+<section id="_running_the_app_in_an_emulator">
+<title>Running the app in an emulator</title>
+<sidebar role="primary">
+<title>Android</title>
+<simpara>To run an Android app in an emulator, see the following <ulink url="https://developer.android.com/training/basics/firstapp/running-app">documentation</ulink>.</simpara>
+<note>
+<simpara>The AeroGear SDK supports API level 21 or later.</simpara>
+</note>
+</sidebar>
+<sidebar role="secondary">
+<title>iOS</title>
+<simpara>To run an iOS app in an emulator, see the following <ulink url="https://help.apple.com/xcode/mac/current/#/dev2809b6cff">documentation</ulink>.</simpara>
+</sidebar>
+<sidebar role="secondary">
+<title>Cordova</title>
+<simpara>Cordova cross-platform applications can be run in the following emulators:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><ulink url="https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#android">Android</ulink></simpara>
+</listitem>
+<listitem>
+<simpara><ulink url="https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#ios">iOS</ulink></simpara>
+<note>
+<simpara>A running emulator on macOS is required to run an iOS application.</simpara>
+</note>
+</listitem>
+</itemizedlist>
+</sidebar>
+<sidebar role="secondary">
+<title>Xamarin</title>
+<simpara>Xamarin cross-platform applications are run in the following emulators:</simpara>
+<itemizedlist>
+<listitem>
+<simpara><ulink url="https://blogs.msdn.microsoft.com/visualstudio/2018/05/08/hyper-v-android-emulator-support/">Android</ulink></simpara>
+</listitem>
+<listitem>
+<simpara><ulink url="https://developer.xamarin.com/getting-started-ios/">iOS</ulink></simpara>
+<note>
+<simpara>A running emulator on macOS is required to run an iOS application.</simpara>
+</note>
+</listitem>
+</itemizedlist>
+</sidebar>
+<simpara>From the showcase app:</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Press the <emphasis role="strong">Authenticate</emphasis> menu item. A login screen is displayed.</simpara>
+</listitem>
+<listitem>
+<simpara>Log in using the credentials you set up with setting up the service.</simpara>
+<simpara>Once the login is successful, you will be taken back to the showcase
+application where you can see the roles and basic information of the user you have just logged in with.</simpara>
+</listitem>
+</orderedlist>
+</section>
+</chapter>
+</book>

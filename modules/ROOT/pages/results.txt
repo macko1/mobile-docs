@@ -1,0 +1,118 @@
+---------------------------------------------------------------------------
+                          :: Technical Accuracy ::
+---------------------------------------------------------------------------
+
+  Description:     The Techical Accuracy test verifies that documentation
+                   is technically accurate. For example, it reports
+                   non-functional or blacklisted external links.
+  Authors:         Jaromir Hradilek, Pavel Vomacka, Pavel Tisnovsky, Lana
+                   Ovcharenko
+  Emails:          jhradilek@redhat.com, pvomacka@redhat.com,
+                   ptisnovs@redhat.com, lovchare@redhat.com
+  Last Modified:   2018-04-27
+  Tags:            DocBook, Release
+  Required tools:  wget, curl
+
+  Test Case: testExternalLinks                                        FAIL
+
+    [ PASS ]  ANALYZING REGULAR LINKS...
+    [ FAIL ]  ftp://mirror.vutbr.cz/ uses FTP protocol, but you can
+              replace it with HTTP and it will work.
+    [ FAIL ]  https://www.openshift.org/ gets redirected.
+    [ PASS ]  https://github.com/minishift/minishift/issues/1287 is OK.
+    [ PASS ]  https://github.com/openshift/origin/issues/18747 is OK.
+    [ FAIL ]  https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#prerequisites
+              is broken (404 status code).
+    [ FAIL ]  https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#macos-with-docker-for-mac
+              is broken (404 status code).
+    [ FAIL ]  https://www.openshift.org/download.html gets redirected.
+    [ FAIL ]  https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#getting-started
+              is broken (404 status code).
+    [ FAIL ]  https://hub.docker.com/ has no page title.
+    [ FAIL ]  https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+              gets redirected.
+    [ PASS ]  https://github.com/aerogear/mobile-core is OK.
+    [ FAIL ]  mobile-clients.xml has 000 status code.
+    [ PASS ]  https://cocoacasts.com/what-are-app-ids-and-bundle-identifiers/
+              is OK.
+    [ FAIL ]  con_services.xml has 000 status code.
+    [ FAIL ]  https://www.keycloak.org/documentation.html gets
+              redirected.
+    [ FAIL ]  https://www.keycloak.org/docs/3.3/server_admin/topics/users/create-user.html
+              gets redirected.
+    [ FAIL ]  https://www.keycloak.org/docs/3.3/server_admin/topics/users/credentials.html
+              gets redirected.
+    [ FAIL ]  https://developer.android.com/studio/index.html gets
+              redirected.
+    [ FAIL ]  http://openjdk.java.net/install/index.html gets redirected.
+    [ PASS ]  https://developer.android.com/studio/install is OK.
+    [ FAIL ]  https://cocoapods.org gets redirected.
+    [ FAIL ]  https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html
+              gets redirected.
+    [ FAIL ]  https://nodejs.org/ gets redirected.
+    [ INFO ]  https://cordova.apache.org/docs/en/latest/guide/cli/#installing-the-cordova-cli
+              is an achor.
+    [ INFO ]  https://cordova.apache.org/#getstarted is an achor.
+    [ FAIL ]  https://www.visualstudio.com/xamarin/ gets redirected.
+    [ FAIL ]  http://openjdk.java.net/install/index.html gets redirected.
+    [ FAIL ]  https://developer.apple.com/download/more/ is forbidden
+              (403 status code).
+    [ FAIL ]  https://developer.xamarin.com/getting-started/ gets
+              redirected.
+    [ PASS ]  https://cocoapods.org/ is OK.
+    [ FAIL ]  https://support.google.com/android/answer/2819522?hl=en
+              gets redirected.
+    [ FAIL ]  https://support.google.com/nexus/answer/2840804?hl=en gets
+              redirected.
+    [ PASS ]  https://developer.android.com/studio/command-line/adb is
+              OK.
+    [ PASS ]  https://support.google.com/nexus/answer/2844832?hl=en is
+              OK.
+    [ FAIL ]  https://support.apple.com/en-us/ht204060 has no page title.
+    [ FAIL ]  https://support.apple.com/en-us/ht201371 has no page title.
+    [ FAIL ]  https://support.apple.com/en-us/HT204477 has no page title.
+    [ PASS ]  https://developer.android.com/training/basics/firstapp/running-app
+              is OK.
+    [ FAIL ]  https://help.apple.com/xcode/mac/current/#/dev2809b6cff has
+              no page title.
+    [ INFO ]  https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#android
+              is an achor.
+    [ INFO ]  https://cordova.apache.org/docs/en/2.7.0/guide/command-line/#ios
+              is an achor.
+    [ FAIL ]  https://blogs.msdn.microsoft.com/visualstudio/2018/05/08/hyper-v-android-emulator-support/
+              has 500 status code.
+    [ FAIL ]  https://developer.xamarin.com/getting-started-ios/ gets
+              redirected.
+    [ PASS ]  OVERALL RESULTS FOR REGULAR LINKS:
+    [ FAIL ]  Valid FTP: 1
+    [ FAIL ]  Invalid FTP: 0
+    [ FAIL ]  Broken: 3
+    [ FAIL ]  Forbidden: 1
+    [ FAIL ]  Other status code: 3
+    [ FAIL ]  No page title: 5
+    [ FAIL ]  Redirected: 17
+    [ INFO ]  Internal: 0
+    [ INFO ]  From example list: 0
+    [ INFO ]  Anchors: 4
+    [ INFO ]  Commands: 0
+    [ PASS ]  OK: 9
+
+  Test Summary                                                            
+
+    Executed Test Cases: 1
+    Passed Test Cases:   0
+    Failed Test Cases:   1
+    Encountered Errors:  0
+    Overall Result:      FAIL
+
+---------------------------------------------------------------------------
+                               :: Summary ::
+---------------------------------------------------------------------------
+
+  Executed Tests: 1
+  Passed Tests:   0
+  Failed Tests:   1
+  Overall Result: FAIL
+
+---------------------------------------------------------------------------
+Generated by Emender                           https://github.com/emender/

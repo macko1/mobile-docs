@@ -75,7 +75,7 @@ NOTE: If your Cluster IP address is reported as 127.0.0.1, the installation will
 ----
 DockerHub Tag (Defaults to latest):
 DockerHub Organisation (Defaults to aerogearcatalog):
-Cluster IP (Defaults to < Network IP Address >)
+// Cluster IP (Defaults to Network IP Address)
 Wildcard DNS Host (Defaults to nip.io):
 ----
 +
@@ -137,7 +137,7 @@ NOTE: The following command will only add the specified port for the current ses
 ----
 $ firewall-cmd --add-port 443/tcp
 $ firewall-cmd --add-port 80/tcp
----- 
+----
 
 == DockerHub, Cluster IP and Wildcard DNS Host values
 
@@ -153,7 +153,7 @@ If you want to connect to your OpenShift instance from a mobile device, ensure t
 Typically, you should ensure you are using the IP Address of your Wireless Adapter (if one exists):
 [source,bash,subs="attributes"]
 ----
-Cluster IP (Defaults to < Network IP Address >)
+Cluster IP (Defaults to Network IP Address)
 ----
 
 The *Wildcard DNS Host* option alters the wildcard DNS host you want to use:
